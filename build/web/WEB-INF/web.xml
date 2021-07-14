@@ -95,4 +95,11 @@
         <res-auth>Container</res-auth>
         <res-sharing-scope>Shareable</res-sharing-scope>
     </resource-ref>
+    <context-param> <!--log4j-->
+        <param-name>log4j-config-location</param-name>
+        <param-value>WEB-INF/log4j.properties</param-value>
+    </context-param>
+    <!--<listener> neu weblisten bi loi
+        <listener-class>locdq.listenner.MyContextServletListener</listener-class>
+    </listener>-->
 </web-app>

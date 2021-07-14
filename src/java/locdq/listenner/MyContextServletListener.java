@@ -5,6 +5,7 @@
  */
 package locdq.listenner;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -17,22 +18,32 @@ import java.util.Properties;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  *
  * @author test
  */
+@WebListener("application context listener")
 public class MyContextServletListener implements ServletContextListener {
 
     private final String PATH="/WEB-INF/properties.properties";
     
     @Override
-    public void contextInitialized(ServletContextEvent sce) {
+    public void contextInitialized(ServletContextEvent sce) {//log4j thực hiện tại đây
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         ServletContext context = sce.getServletContext();
         String path = context.getRealPath("/");
         Map<String, String> propertymap = readfile(path+PATH);
         context.setAttribute("PROPERTY_MAP", propertymap);
+        //log4j
+        String log4jConfigFile=context.getInitParameter("log4j-config-location");
+        String fullPath=context.getRealPath("/")+File.separator+log4jConfigFile;
+        System.out.println(context.getRealPath("/"));
+        // sử dụng link động
+        System.setProperty("PATH",context.getRealPath("/"));
+        PropertyConfigurator.configure(fullPath);
     }
 
     private Map<String, String> readfile(String path) {

@@ -14,12 +14,15 @@ import javax.servlet.http.HttpSession;
 import locdq.users.UsersDAO;
 import locdq.users.UsersDTO;
 import locdq.utils.ChangeDataTypes;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author test
  */
 public class LoginServlet extends HttpServlet {
+    
+      static final Logger LOGGER=Logger.getLogger(LoginServlet.class);//ghi file log    
 
     private final String ERROR = "login.jsp";
     private final String SUCCESS = "LoadDataServlet";
@@ -46,16 +49,20 @@ public class LoginServlet extends HttpServlet {
             if (user != null) {
                 if (user.getStatusDTO().getStatusID().equals("s2")) {
                     request.setAttribute("ERRORLOGIN", "Admin has issued a ban on you!!!");
+                     LOGGER.warn("Admin baned account!");
                 } else {
                     HttpSession session = request.getSession();
                     session.setAttribute("USER", user);
+                    LOGGER.info("User: "+user.getUsername()+" Login Success");
                     url = SUCCESS;
                 }
             }else {
                 request.setAttribute("ERRORLOGIN", "UserID or Password invalid!!!");
+                LOGGER.warn("Account Invalid!");
             }
         } catch (Exception e) {            
-            log("Error in LoginServlet" + e.getMessage());
+            //log("Error in LoginServlet" + e.getMessage());
+            LOGGER.error(e);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
